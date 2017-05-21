@@ -7,13 +7,14 @@ import { Router, Route, BrowserRouter, IndexRoute } from 'react-router-dom'
 
 //store
 import App from './App'
+import Login from './login'
 import store from './store'
 
 render((
 
 	<Provider store={ store }>
 		<BrowserRouter>
-			<Route path="/" component={ App } />
+			<Route path="/" component={ Login } />
 	    </BrowserRouter>
     </Provider>
 

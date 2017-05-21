@@ -9,7 +9,8 @@ export default function(state = init, action) {
     switch(action.type) {
 
     	case '_USER:LOGIN':
-    		return {...state};
+    	case '_USER:UPDATE':
+    		return {...state, ...action.payload};
 
         default:
             return state;
