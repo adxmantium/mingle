@@ -9,9 +9,27 @@ export const update = (val) => {
 	}
 }
 
-export const login = (cred) => {
-	return {
-		type: '_USER:LOGIN',
-		payload: {}
+export const login = (email) => {
+	return (dispatch) => {
+		dispatch({
+	 		type: '_USER:LOGIN_PENDING',
+	 		payload: {login_pending: true},
+	 	});
+
+		axios.post('/login', email)
+			 .then((res) => {
+			 	console.log('res: ', res.data);
+			 	dispatch({
+					type: '_USER:LOGIN_DONE',
+					payload: {login_pending: false}
+				});
+			 })
+			 .catch((err) => {
+			 	console.log('error: ', err);
+			 	dispatch({
+			 		type: '_USER:LOGIN_ERR',
+			 		payload: {login_pending: true},
+			 	});
+			 });
 	}
 }

@@ -10,6 +10,9 @@ export default function(state = init, action) {
 
     	case '_USER:LOGIN':
     	case '_USER:UPDATE':
+    	case '_USER:LOGIN_ERR':
+    	case '_USER:LOGIN_DONE':
+    	case '_USER:LOGIN_PENDING':
     		return {...state, ...action.payload};
 
         default:

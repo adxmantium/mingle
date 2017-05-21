@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "d8826cd78901da09e1a4"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "5c8dafddfc9bb84d706f"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -49272,8 +49272,8 @@ var App = function (_Component) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return update; });
-/* unused harmony export login */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return update; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return login; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__("./node_modules/axios/index.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 // mingle/src/actions/user.js
@@ -49287,10 +49287,26 @@ var update = function update(val) {
 	};
 };
 
-var login = function login(cred) {
-	return {
-		type: '_USER:LOGIN',
-		payload: {}
+var login = function login(email) {
+	return function (dispatch) {
+		dispatch({
+			type: '_USER:LOGIN_PENDING',
+			payload: { login_pending: true }
+		});
+
+		__WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/login', email).then(function (res) {
+			console.log('res: ', res.data);
+			dispatch({
+				type: '_USER:LOGIN_DONE',
+				payload: { login_pending: false }
+			});
+		}).catch(function (err) {
+			console.log('error: ', err);
+			dispatch({
+				type: '_USER:LOGIN_ERR',
+				payload: { login_pending: true }
+			});
+		});
 	};
 };
 
@@ -49372,10 +49388,11 @@ var Login = function (_Component) {
 
 		var _props = this.props,
 		    dispatch = _props.dispatch,
-		    _user = _props._user;
+		    _user = _props._user,
+		    email = _user.email;
 
 
-		dispatch(login(_user));
+		dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__actions_user__["a" /* login */])({ email: email }));
 	};
 
 	Login.prototype.render = function render() {
@@ -49391,7 +49408,7 @@ var Login = function (_Component) {
 				name: 'email',
 				placeholder: 'Enter email',
 				onChange: function onChange(e) {
-					return dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__actions_user__["a" /* update */])({ email: e.target.value }));
+					return dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__actions_user__["b" /* update */])({ email: e.target.value }));
 				} }),
 			__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
 				'button',
@@ -49406,7 +49423,7 @@ var Login = function (_Component) {
 
 var mapStateToProps = function mapStateToProps(state, props) {
 	return {
-		user: state.user
+		_user: state._user
 	};
 };
 
@@ -49437,6 +49454,9 @@ var init = {};
 
         case '_USER:LOGIN':
         case '_USER:UPDATE':
+        case '_USER:LOGIN_ERR':
+        case '_USER:LOGIN_DONE':
+        case '_USER:LOGIN_PENDING':
             return _extends({}, state, action.payload);
 
         default:

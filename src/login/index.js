@@ -3,7 +3,7 @@
 import { connect } from 'react-redux'
 import React, { Component } from 'react'
 
-import { update } from './../actions/user'
+import { update, login } from './../actions/user'
 
 class Login extends Component{
 	constructor(props){
@@ -14,9 +14,10 @@ class Login extends Component{
 	_login(e){
 		e.preventDefault();
 
-		let { dispatch, _user } = this.props;
+		let { dispatch, _user } = this.props,
+			{ email } = _user;
 
-		dispatch( login(_user) );
+		dispatch( login({email}) );
 	}
 
 	render(){
@@ -39,7 +40,7 @@ class Login extends Component{
 
 const mapStateToProps = (state, props) => {
 	return {
-		user: state.user
+		_user: state._user
 	};
 };
 

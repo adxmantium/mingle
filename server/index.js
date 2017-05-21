@@ -1,12 +1,18 @@
 // mingle/src/server.js
 
+var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
 
 app.use('/', express.static(__dirname + '/../public'));
 
-app.get('/', function (req, res){
-	res.send('Hello World!');
+//Here we are configuring express to use body-parser as middle-ware.
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.post('/login', function (req, res){
+	console.log('req: ', req.body);
+	res.send(req.body);
 });
 
 app.listen(3000, function (){
